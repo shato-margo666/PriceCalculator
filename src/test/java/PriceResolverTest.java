@@ -149,6 +149,34 @@ public class PriceResolverTest {
     }
 
     @Test
+    public void shouldMergeWideNewTheSamePrices() {
+        oldPrices.add(price12_0501_1501);
+        oldPrices.add(price12_1501_1601);
+        newPrices.add(price12_0501_3001);
+        List<Price> prices = priceService.mergePrices(oldPrices, newPrices);
+
+        assertThat(prices.size(), is(1));
+        assertTrue(prices.stream().anyMatch(p -> p.getBegin().equals(price12_0501_3001.getBegin()) && p.getEnd().equals(price12_0501_3001.getEnd())));
+    }
+
+    @Test
+    public void shouldMergeEdgeConditionSamePrices() {
+        oldPrices.add(price12_0501_1501);
+        newPrices.add(price12_1501_1601);
+        List<Price> prices = priceService.mergePrices(oldPrices, newPrices);
+
+        assertThat(prices.size(), is(1));
+        assertTrue(prices.stream().anyMatch(p -> p.getBegin().equals(price12_0501_1501.getBegin()) && p.getEnd().equals(price12_1501_1601.getEnd())));
+
+        oldPrices = Collections.singletonList(price12_1501_1601);
+        newPrices = Collections.singletonList(price12_0501_1501);
+        prices = priceService.mergePrices(oldPrices, newPrices);
+
+        assertThat(prices.size(), is(1));
+        assertTrue(prices.stream().anyMatch(p -> p.getBegin().equals(price12_0501_1501.getBegin()) && p.getEnd().equals(price12_1501_1601.getEnd())));
+    }
+
+    @Test
     public void shouldMergeWithDifferentPrices() {
         oldPrices.add(price12_1001_2001);
         newPrices.add(price12_0601_1501);
