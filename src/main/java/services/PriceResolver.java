@@ -41,7 +41,7 @@ public class PriceResolver {
             }
 
             commonPeriodPrices.stream().filter(oldPrice -> oldPrice.getValue() != newPrice.getValue())
-                    .forEach(oldPrice -> mergeTwoPricesWithDifferentValues222(oldPrices, newPrice, oldPrice));
+                    .forEach(oldPrice -> mergeTwoPricesWithDifferentValues(oldPrices, newPrice, oldPrice));
         }
     }
 
@@ -64,7 +64,7 @@ public class PriceResolver {
         return !betweenPoint.before(begin) && betweenPoint.before(end);
     }
 
-    private void mergeTwoPricesWithDifferentValues222(List<Price> resultPrices, Price newPrice, Price oldPrice) {
+    private void mergeTwoPricesWithDifferentValues(List<Price> resultPrices, Price newPrice, Price oldPrice) {
         resultPrices.add(newPrice);
         resultPrices.remove(oldPrice);
 
